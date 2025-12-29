@@ -12,17 +12,49 @@ Git worktrees let you have multiple branches checked out at the same time in dif
 
 ## Features
 
-- **`gwt`** - Create a new worktree with a new branch
-- **`gwt-checkout`** - Create a worktree from an existing branch
-- **`gwt-rm`** - Remove a worktree
-- **`gwt-ls`** - List all worktrees
+- **`gwt <base> <name>`** - Create a new worktree with a new branch
+- **`gwt checkout <branch> <name>`** - Create a worktree from an existing branch
+- **`gwt rm <name>`** - Remove a worktree
+- **`gwt ls`** - List all worktrees
 
 All worktrees are created in a `<repo>-worktrees/` directory next to your main repo.
 
 ## Installation
+
+### Recommended: Using the install script
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/magidandrew/gwt/main/git-worktree-helpers.sh >> ~/.zshrc && source ~/.zshrc
+# Clone or download the repo
+git clone https://github.com/magidandrew/gwt.git
+cd gwt
+
+# Run the install script
+./install.sh
 ```
+
+The script will copy `git-worktree-helpers.sh` to `~/.config/gwt/` and show you the exact line to add to your `~/.zshrc`:
+
+```bash
+source "$HOME/.config/gwt/git-worktree-helpers.sh"
+```
+
+Quick one-liner to add it:
+```bash
+echo 'source "$HOME/.config/gwt/git-worktree-helpers.sh"' >> ~/.zshrc && source ~/.zshrc
+```
+
+**Benefits:**
+- Easy to update (just run `./install.sh` again)
+- Keeps your `.zshrc` clean
+- No duplicate code issues
+
+### Alternative: Direct install
+
+```bash
+curl -o- https://raw.githubusercontent.com/magidandrew/gwt/main/install.sh | bash
+```
+
+Then add the source line shown in the output to your `~/.zshrc`.
 
 ## Usage
 
@@ -54,14 +86,17 @@ gwt develop bugfix-123
 ### Checkout existing branch into worktree
 
 ```bash
-gwt-checkout <branch> <name>
+gwt checkout <branch> <name>
+# or shorter:
+gwt co <branch> <name>
 ```
 
 **Example:**
 
 ```bash
 # Checkout existing branch into a worktree
-gwt-checkout hotfix/urgent-bug hotfix
+gwt checkout hotfix/urgent-bug hotfix
+gwt co hotfix/urgent-bug hotfix  # shorter alias
 ```
 
 **What it does:**
@@ -72,13 +107,15 @@ gwt-checkout hotfix/urgent-bug hotfix
 ### Remove a worktree
 
 ```bash
-gwt-rm <name>
+gwt rm <name>
+# or:
+gwt remove <name>
 ```
 
 **Example:**
 
 ```bash
-gwt-rm feature-auth
+gwt rm feature-auth
 ```
 
 **What it does:**
@@ -88,10 +125,12 @@ gwt-rm feature-auth
 ### List all worktrees
 
 ```bash
-gwt-ls
+gwt ls
+# or:
+gwt list
 ```
 
-Shows all worktrees and their branches (alias for `git worktree list`)
+Shows all worktrees and their branches
 
 ## Example Workflow
 
@@ -120,10 +159,10 @@ git push
 cd ~/projects/my-app-worktrees/new-feature/
 
 # When done with the urgent fix
-gwt-rm urgent-fix
+gwt rm urgent-fix
 
 # List all your worktrees
-gwt-ls
+gwt ls
 # /Users/you/projects/my-app              abc123 [main]
 # /Users/you/projects/my-app-worktrees/new-feature  def456 [wt/new-feature]
 ```
@@ -152,6 +191,16 @@ cd ../my-app-worktrees/feature-auth
 
 # With helpers
 gwt main feature-auth
+```
+
+## All Commands
+
+```bash
+gwt <base> <name> [branch]      # Create new worktree with new branch
+gwt checkout <branch> <name>    # Checkout existing branch (alias: co)
+gwt rm <name>                   # Remove worktree (alias: remove)
+gwt ls                          # List worktrees (alias: list)
+gwt help                        # Show help
 ```
 
 ## Troubleshooting
