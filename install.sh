@@ -13,6 +13,7 @@ NC='\033[0m' # No Color
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/gwt"
 SCRIPT_NAME="git-worktree-helpers.sh"
 INSTALL_PATH="$CONFIG_DIR/$SCRIPT_NAME"
+GITHUB_RAW_URL="https://raw.githubusercontent.com/magidandrew/gwt/main/git-worktree-helpers.sh"
 
 echo -e "${BLUE}Installing git-worktree-helpers...${NC}"
 echo ""
@@ -23,9 +24,24 @@ if [[ ! -d "$CONFIG_DIR" ]]; then
   mkdir -p "$CONFIG_DIR"
 fi
 
-# Copy the script
-echo "Copying $SCRIPT_NAME to $INSTALL_PATH"
-cp "$SCRIPT_NAME" "$INSTALL_PATH"
+# Check if we're in the repo directory (local install) or need to download (remote install)
+if [[ -f "$SCRIPT_NAME" ]]; then
+  # Local install - copy from current directory
+  echo "Copying $SCRIPT_NAME to $INSTALL_PATH"
+  cp "$SCRIPT_NAME" "$INSTALL_PATH"
+else
+  # Remote install - download from GitHub
+  echo "Downloading $SCRIPT_NAME to $INSTALL_PATH"
+  if command -v curl &> /dev/null; then
+    curl -fsSL "$GITHUB_RAW_URL" -o "$INSTALL_PATH"
+  elif command -v wget &> /dev/null; then
+    wget -qO "$INSTALL_PATH" "$GITHUB_RAW_URL"
+  else
+    echo "Error: Neither curl nor wget found. Please install one of them."
+    exit 1
+  fi
+fi
+
 chmod +x "$INSTALL_PATH"
 
 echo ""
