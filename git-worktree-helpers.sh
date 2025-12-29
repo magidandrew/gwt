@@ -2,6 +2,12 @@
 # git-worktree-helpers.sh
 # Simple bash functions to make git worktrees easier to manage
 
+# Unalias any existing aliases to prevent conflicts
+unalias gwt 2>/dev/null
+unalias gwt-checkout 2>/dev/null
+unalias gwt-rm 2>/dev/null
+unalias gwt-ls 2>/dev/null
+
 # Create a worktree with a new branch
 # Usage: gwt <base-branch> <name> [branch-name]
 gwt() {

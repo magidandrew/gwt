@@ -154,6 +154,29 @@ cd ../my-app-worktrees/feature-auth
 gwt main feature-auth
 ```
 
+## Troubleshooting
+
+### "defining function based on alias" error
+
+If you see an error like:
+```
+/Users/you/.zshrc:XXX: defining function based on alias `gwt'
+/Users/you/.zshrc:XXX: parse error near `()'
+```
+
+This means you already have a `gwt` alias defined in your shell config. The script now automatically removes any conflicting aliases, so:
+
+1. Remove the duplicate code from your `.zshrc` (the section you just appended)
+2. Source the script again:
+   ```bash
+   source ~/.zshrc
+   ```
+
+Or manually check for existing aliases:
+```bash
+alias | grep gwt
+```
+
 ## Requirements
 
 - Git 2.5+ (worktrees were added in Git 2.5)
